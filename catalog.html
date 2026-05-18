@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=20260517-navy-buttons" />
+<link rel="stylesheet" href="css/styles.css?v=20260518-polished-category-dropdown" />
 </head>
 <body>
 <header class="site-header" id="top">
@@ -44,21 +44,7 @@
 </section>
 <section class="section catalog-page reveal">
   <div class="container">
-    <div class="catalog-controls">
-      <div class="catalog-intro">
-        <h2>Explora por categoría</h2>
-      </div>
-    </div>
-    <div class="catalog-results-head selected-category-head">
-      <p id="resultsCount">15 categorías disponibles</p>
-      <h3 id="selectedCategoryTitle">Selecciona una categoría</h3>
-    </div>
-    <div class="category-menu" id="categoryMenu"></div>
-    <div class="selected-products-wrap active" id="selectedProductsWrap">
-        <div class="selected-products-empty">
-        <p>Elige una categoría para ver sus productos, presentaciones y contacto por WhatsApp.</p>
-      </div>
-    </div>
+    <div class="category-menu category-select-panel" id="categoryMenu"></div>
   </div>
 
 </section>
@@ -796,7 +782,7 @@ const catalogData = [
   }
 ];
 const categoryMenu = document.getElementById('categoryMenu');
-const selectedProductsWrap = document.getElementById('selectedProductsWrap');
+let selectedProductsWrap = document.getElementById('selectedProductsWrap');
 const selectedCategoryTitle = document.getElementById('selectedCategoryTitle');
 const resultsCount = document.getElementById('resultsCount');
 const productImageVersion = '20260517-hover-comments';
@@ -823,6 +809,17 @@ function productImageMarkup(product) {
   return `<img src="${productImageSrc(product.image)}" alt="${escapeAttribute(product.name)}" />`;
 }
 
+function getSelectedProductsWrap() {
+  if (!selectedProductsWrap) {
+    selectedProductsWrap = document.createElement('div');
+    selectedProductsWrap.className = 'selected-products-wrap';
+    selectedProductsWrap.id = 'selectedProductsWrap';
+    categoryMenu.insertAdjacentElement('afterend', selectedProductsWrap);
+  }
+
+  return selectedProductsWrap;
+}
+
 function activateReveal() {
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
@@ -845,24 +842,72 @@ function categoryInitials(name) {
 }
 
 function renderCategoryMenu() {
-  resultsCount.textContent = `${catalogData.length} categorías disponibles`;
-  categoryMenu.innerHTML = catalogData.map(category => `
-    <button class="category-menu-item" data-category="${category.category}">
-      <span class="category-menu-icon">${categoryInitials(category.category)}</span>
-      <div>
-        <strong>${category.category}</strong>
-        <span>${category.products.length} productos</span>
+  if (resultsCount) {
+    resultsCount.textContent = `${catalogData.length} categorías disponibles`;
+  }
+  const sortedCategories = [...catalogData].sort((a, b) => a.category.localeCompare(b.category, 'es', { sensitivity: 'base' }));
+  categoryMenu.innerHTML = `
+    <span class="category-select-label" id="categorySelectLabel">Categoría de productos</span>
+    <div class="category-select-shell">
+      <button class="category-select" id="categorySelectButton" type="button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="categorySelectLabel categorySelectValue" aria-describedby="categorySelectHelp">
+        <span id="categorySelectValue">Seleccione una categoría</span>
+      </button>
+      <div class="category-select-list" id="categorySelectList" role="listbox" aria-labelledby="categorySelectLabel">
+        ${sortedCategories.map(category => `
+          <button class="category-select-option" type="button" role="option" data-category="${escapeAttribute(category.category)}" aria-selected="false">
+            <span class="category-option-name">${category.category}</span>
+            <span class="category-option-count">${category.products.length} productos</span>
+          </button>
+        `).join('')}
       </div>
-    </button>
-  `).join('');
-  categoryMenu.querySelectorAll('.category-menu-item').forEach(button => {
-    button.addEventListener('click', () => {
-      categoryMenu.querySelectorAll('.category-menu-item').forEach(item => item.classList.remove('active'));
-      button.classList.add('active');
-      const category = catalogData.find(item => item.category === button.dataset.category);
-      if (!category) return;
-      renderCategoryProducts(category);
-    });
+    </div>
+    <p class="category-select-help" id="categorySelectHelp">Selecciona una línea para ver productos, presentaciones y contacto por WhatsApp.</p>
+  `;
+
+  const categorySelectButton = document.getElementById('categorySelectButton');
+  const categorySelectValue = document.getElementById('categorySelectValue');
+  const categorySelectList = document.getElementById('categorySelectList');
+  const categoryOptions = categoryMenu.querySelectorAll('.category-select-option');
+
+  function closeCategoryDropdown() {
+    categoryMenu.classList.remove('is-open');
+    categorySelectButton.setAttribute('aria-expanded', 'false');
+  }
+
+  categorySelectButton.addEventListener('click', () => {
+    const isOpen = categoryMenu.classList.toggle('is-open');
+    categorySelectButton.setAttribute('aria-expanded', String(isOpen));
+  });
+
+  function selectCategoryOption(option) {
+    const category = catalogData.find(item => item.category === option.dataset.category);
+    if (!category) return;
+
+    categoryOptions.forEach(item => item.setAttribute('aria-selected', 'false'));
+    option.setAttribute('aria-selected', 'true');
+    categorySelectValue.textContent = `${category.category} - ${category.products.length} productos`;
+    closeCategoryDropdown();
+
+    renderCategoryProducts(category);
+  }
+
+  categoryOptions.forEach(option => {
+    option.addEventListener('click', () => selectCategoryOption(option));
+  });
+
+  categorySelectList.addEventListener('pointerdown', event => {
+    const option = event.target.closest('.category-select-option');
+    if (!option) return;
+    event.preventDefault();
+    selectCategoryOption(option);
+  });
+
+  document.addEventListener('click', event => {
+    if (!categoryMenu.contains(event.target)) closeCategoryDropdown();
+  });
+
+  categorySelectList.addEventListener('keydown', event => {
+    if (event.key === 'Escape') closeCategoryDropdown();
   });
 }
 
@@ -873,17 +918,20 @@ const productsPerPage = 4;
 
 function renderCategoryProducts(category, page = 1) {
   currentPage = page;
+  const productsWrap = getSelectedProductsWrap();
 
   const totalPages = Math.ceil(category.products.length / productsPerPage);
   const start = (currentPage - 1) * productsPerPage;
   const end = start + productsPerPage;
   const productsToShow = category.products.slice(start, end);
 
-  selectedCategoryTitle.textContent = category.category;
-  selectedProductsWrap.classList.remove('active');
+  if (selectedCategoryTitle) {
+    selectedCategoryTitle.textContent = category.category;
+  }
+  productsWrap.classList.remove('active');
 
   window.requestAnimationFrame(() => {
-    selectedProductsWrap.innerHTML = `
+    productsWrap.innerHTML = `
       <div class="selected-products-grid">
         ${productsToShow.map(product => `
           <article class="selected-product-card" tabindex="0" title="${escapeAttribute(product.description)}" data-comment="${escapeAttribute(product.description)}">
@@ -922,7 +970,7 @@ function renderCategoryProducts(category, page = 1) {
       renderCategoryProducts(category, currentPage + 1);
     });
 
-    selectedProductsWrap.classList.add('active');
+    productsWrap.classList.add('active');
   });
 }
 
