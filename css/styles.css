@@ -5417,6 +5417,15 @@ body {
   color: #ffffff;
 }
 
+.home-hero {
+  min-height: 0;
+  padding: 58px 0 44px;
+  background:
+    linear-gradient(118deg, rgba(16, 43, 70, 0.92) 0%, rgba(22, 70, 111, 0.82) 48%, rgba(157, 181, 210, 0.58) 100%),
+    url('../images/image-upload1778200246.webp') center/cover no-repeat;
+  color: #ffffff;
+}
+
 .cert-hero::after {
   content: "";
   position: absolute;
@@ -5428,12 +5437,35 @@ body {
   background: linear-gradient(180deg, transparent, rgba(220, 232, 248, 0.94));
 }
 
+.home-hero::after {
+  height: 54px;
+  background: linear-gradient(180deg, transparent, rgba(220, 232, 248, 0.94));
+}
+
+.home-hero + .section {
+  background:
+    linear-gradient(180deg, rgba(220, 232, 248, 0.94) 0%, rgba(234, 242, 255, 0.96) 44%, rgba(255, 255, 255, 0.98) 100%);
+}
+
 .cert-hero-grid {
   position: relative;
   z-index: 1;
   grid-template-columns: minmax(0, 1fr) minmax(260px, 330px);
   gap: 28px;
   align-items: center;
+  min-width: 0;
+}
+
+.home-hero-grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  width: 100%;
+  max-width: 1040px;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 330px);
+  gap: 28px;
+  align-items: center;
+  min-width: 0;
 }
 
 .cert-eyebrow {
@@ -5446,7 +5478,17 @@ body {
   letter-spacing: 0;
 }
 
+.home-hero h1 {
+  font-size: clamp(2.2rem, 4vw, 3.6rem);
+  letter-spacing: 0;
+}
+
 .cert-hero p {
+  max-width: 720px;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.home-hero p {
   max-width: 720px;
   color: rgba(255, 255, 255, 0.88);
 }
@@ -5461,6 +5503,13 @@ body {
     inset 0 1px 0 rgba(255, 255, 255, 0.22),
     0 18px 42px rgba(16, 43, 70, 0.24);
   backdrop-filter: blur(12px);
+}
+
+.home-hero-note {
+  justify-self: end;
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .cert-hero-note span {
@@ -5617,13 +5666,48 @@ body {
     0 12px 24px rgba(16, 43, 70, 0.14);
 }
 
+@media (max-width: 960px) {
+  .home-hero-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .home-hero-note {
+    width: 100%;
+    justify-self: stretch;
+  }
+}
+
 @media (max-width: 720px) {
+  .nav-container {
+    width: min(100%, calc(100vw - 28px));
+  }
+
+  .nav-links {
+    max-width: 100%;
+    justify-content: center;
+    gap: 10px 14px;
+  }
+
+  .nav-links a {
+    font-size: .94rem;
+  }
+
   .contact-card {
     padding: 24px 20px;
   }
 
   .cert-section-heading {
     padding: 22px 20px;
+  }
+
+  .home-hero {
+    padding: 46px 0 40px;
+  }
+
+  .home-hero-note strong,
+  .home-hero-note p {
+    overflow-wrap: anywhere;
+    word-break: break-word;
   }
 
   .cert-publication-grid {
