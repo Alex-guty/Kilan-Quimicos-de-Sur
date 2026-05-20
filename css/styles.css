@@ -6519,6 +6519,23 @@ body {
   padding-bottom: 0;
 }
 
+.cert-publication-grid {
+  display: flex !important;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: stretch;
+  gap: 18px;
+}
+
+.cert-publication-grid .cert-text-only {
+  flex: 0 1 300px;
+  width: min(100%, 300px);
+}
+
+.cert-publication-grid .cert-publication-card:nth-child(n+3) {
+  display: none !important;
+}
+
 @media (max-width: 720px) {
   .cert-publication-card.cert-text-only {
     height: auto !important;
