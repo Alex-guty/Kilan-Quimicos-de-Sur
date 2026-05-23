@@ -11,9 +11,9 @@
   <path d="M28 55 Q28 62 28 62 Q28 62 28 55" fill="none" stroke="#1f2937" stroke-width="2.5" stroke-linecap="round"/>
   <path d="M28 54 Q23 62 28 66 Q33 62 28 54" fill="#008f39" opacity="0.9"/>
   <!-- Divider line -->
-  <line x1="78" y1="8" x2="78" y2="56" stroke="#1f2937" stroke-width="2"/>
+  <line x1="78" y1="8" x2="78" y2="78" stroke="#1f2937" stroke-width="2"/>
   <!-- QSS text -->
-  <text x="96" y="52" font-family="Georgia, 'Times New Roman', serif" font-size="52" font-weight="400" fill="#1f2937">QSS</text>
+  <text x="92" y="50" font-family="Georgia, 'Times New Roman', serif" font-size="54" font-weight="400" fill="#1f2937">QSS</text>
   <!-- Subtitle -->
-<text x="96" y="72" font-family="'Segoe UI', Arial, sans-serif" font-size="9" font-weight="600" letter-spacing="0.3" fill="#374151">QUÍMICOS SUPERIORES DEL SUR, S.R.L.</text>
+  <text x="92" y="76" font-family="'Segoe UI', Arial, sans-serif" font-size="14" font-weight="800" letter-spacing="0.15" fill="#374151">QUÍMICOS SUPERIORES DEL SUR, S.R.L.</text>
 </svg>
