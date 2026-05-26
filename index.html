@@ -5,11 +5,45 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Kilan | Químicos Superiores del Sur S.R.L.</title>
 <meta name="description" content="Kilan by Químicos Superiores del Sur S.R.L. Limpieza a tu alcance." />
+<meta name="robots" content="index, follow" />
+<meta name="theme-color" content="#0f5132" />
+<link rel="canonical" href="https://alex-guty.github.io/Kilan-Quimicos-de-Sur/" />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="es_CR" />
+<meta property="og:site_name" content="Kilan | Químicos Superiores del Sur" />
+<meta property="og:title" content="Kilan | Químicos Superiores del Sur S.R.L." />
+<meta property="og:description" content="Productos de limpieza, higiene y desinfección para hogares, negocios e industria en Costa Rica." />
+<meta property="og:url" content="https://alex-guty.github.io/Kilan-Quimicos-de-Sur/" />
+<meta property="og:image" content="https://alex-guty.github.io/Kilan-Quimicos-de-Sur/images/image-upload1778200246.webp" />
+<meta name="twitter:card" content="summary_large_image" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css?v=20260525-pyme-grid-card" />
 <script src="js/chatbot.js?v=20260523-chatbot" defer></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "Químicos Superiores del Sur S.R.L.",
+  "alternateName": "Kilan",
+  "url": "https://alex-guty.github.io/Kilan-Quimicos-de-Sur/",
+  "logo": "https://alex-guty.github.io/Kilan-Quimicos-de-Sur/logo.svg",
+  "image": "https://alex-guty.github.io/Kilan-Quimicos-de-Sur/images/image-upload1778200246.webp",
+  "description": "Fabricación y distribución de productos de limpieza, higiene y desinfección para hogares, comercios e industria.",
+  "telephone": "+50662957826",
+  "email": "qsdelsursrl@gmail.com",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "San Diego",
+    "addressRegion": "Cartago",
+    "addressCountry": "CR"
+  },
+  "sameAs": [
+    "https://www.facebook.com/osokilan/?locale=es_LA"
+  ]
+}
+</script>
 </head>
 <body>
 <header class="site-header" id="top">
@@ -197,13 +231,19 @@
 
 <script>
 function activateReveal() {
+  const revealItems = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    revealItems.forEach(item => item.classList.add('visible'));
+    return;
+  }
+
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (entry.isIntersecting) entry.target.classList.add('visible');
     });
   }, { threshold: 0.16 });
 
-  document.querySelectorAll('.reveal').forEach(item => observer.observe(item));
+  revealItems.forEach(item => observer.observe(item));
 }
 
 if ('scrollRestoration' in history) {

@@ -5,6 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Catálogo Kilan | Químicos Superiores del Sur S.R.L.</title>
 <meta name="description" content="Catálogo completo de productos Kilan: limpieza, higiene y desinfección." />
+<meta name="robots" content="index, follow" />
+<meta name="theme-color" content="#0f5132" />
+<link rel="canonical" href="https://alex-guty.github.io/Kilan-Quimicos-de-Sur/catalog.html" />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="es_CR" />
+<meta property="og:site_name" content="Kilan | Químicos Superiores del Sur" />
+<meta property="og:title" content="Catálogo Kilan | Químicos Superiores del Sur S.R.L." />
+<meta property="og:description" content="Catálogo de cloros, desinfectantes, alcoholes, lavamanos, lavaplatos, aromatizantes y más productos Kilan." />
+<meta property="og:url" content="https://alex-guty.github.io/Kilan-Quimicos-de-Sur/catalog.html" />
+<meta property="og:image" content="https://alex-guty.github.io/Kilan-Quimicos-de-Sur/images/image-upload1778200246.webp" />
+<meta name="twitter:card" content="summary_large_image" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -698,12 +709,18 @@ function getSelectedProductsWrap() {
 }
 
 function activateReveal() {
+  const revealItems = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    revealItems.forEach(item => item.classList.add('visible'));
+    return;
+  }
+
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (entry.isIntersecting) entry.target.classList.add('visible');
     });
   }, { threshold: 0.16 });
-  document.querySelectorAll('.reveal').forEach(item => observer.observe(item));
+  revealItems.forEach(item => observer.observe(item));
 }
 
 /*  <img src="${category.image}" alt="${category.category}" /> */
@@ -839,13 +856,18 @@ function renderCategoryProducts(category, page = 1) {
 
     
 
-    document.getElementById('prevPage')?.addEventListener('click', () => {
-      renderCategoryProducts(category, currentPage - 1);
-    });
-
-    document.getElementById('nextPage')?.addEventListener('click', () => {
-      renderCategoryProducts(category, currentPage + 1);
-    });
+    const prevPageButton = document.getElementById('prevPage');
+    const nextPageButton = document.getElementById('nextPage');
+    if (prevPageButton) {
+      prevPageButton.addEventListener('click', () => {
+        renderCategoryProducts(category, currentPage - 1);
+      });
+    }
+    if (nextPageButton) {
+      nextPageButton.addEventListener('click', () => {
+        renderCategoryProducts(category, currentPage + 1);
+      });
+    }
 
     productsWrap.classList.add('active');
   });
