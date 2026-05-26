@@ -6535,7 +6535,7 @@ body {
 }
 
 .cert-publication-grid .cert-publication-card:nth-child(n+3) {
-  display: none !important;
+  display: grid !important;
 }
 
 @media (max-width: 720px) {
@@ -6774,6 +6774,75 @@ body {
     width: 21px;
     height: 21px;
   }
+}
+
+.about .narrow p,
+.section-intro p,
+.benefit-card p,
+.faq-list p,
+.contact-card p,
+.cert-section-heading p,
+.cert-card-body p:not(.cert-meta) {
+  color: #000 !important;
+}
+
+.home-hero ~ .about p,
+.about p {
+  max-width: none;
+  width: 100%;
+}
+
+.pyme-section {
+  padding: 12px 0 44px;
+  background: linear-gradient(180deg, #edf5ff, #f8fbff);
+}
+
+.pyme-section .container {
+  display: flex;
+  justify-content: center;
+}
+
+.pyme-card {
+  display: grid;
+  width: min(300px, 92vw);
+  min-height: 300px;
+  place-items: center;
+  padding: 30px;
+  border: 1px solid rgba(113, 133, 157, 0.24);
+  border-top-color: rgba(255, 255, 255, 0.9);
+  border-radius: 16px;
+  background: linear-gradient(180deg, #ffffff, #f4f9ff);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    0 16px 34px rgba(16, 43, 70, 0.11);
+}
+
+.pyme-card img {
+  display: block;
+  width: 100%;
+  max-width: 220px;
+  height: auto;
+  object-fit: contain;
+}
+
+.cert-publication-card.cert-text-only.pyme-publication-card .cert-card-body {
+  display: flex !important;
+  flex-direction: column;
+  gap: 10px !important;
+}
+
+.pyme-publication-card img {
+  align-self: center;
+  width: 56px;
+  height: auto;
+  margin-top: auto;
+  object-fit: contain;
+}
+
+.pyme-publication-card .cert-card-body p:not(.cert-meta) {
+  display: block !important;
+  overflow: visible !important;
+  -webkit-line-clamp: unset;
 }
 
 .sr-only {
