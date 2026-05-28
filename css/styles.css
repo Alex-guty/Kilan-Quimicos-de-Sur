@@ -7171,3 +7171,60 @@ body {
     max-height: min(620px, calc(100dvh - 92px));
   }
 }
+
+@media (max-width: 767px) {
+  .cert-hero:not(.catalog-hero) {
+    padding: 58px 0 64px;
+    background-position: center center;
+    background-size: cover;
+  }
+
+  .cert-hero:not(.catalog-hero) .cert-hero-grid {
+    display: grid;
+    width: min(100%, calc(100vw - 32px));
+    grid-template-columns: 1fr;
+    gap: 24px;
+    align-items: start;
+    justify-items: center;
+  }
+
+  .cert-hero:not(.catalog-hero) .cert-hero-grid > div:first-child {
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+  }
+
+  .cert-hero:not(.catalog-hero) h1 {
+    max-width: 100%;
+    font-size: 2.25rem;
+    line-height: 1.08;
+  }
+
+  .cert-hero:not(.catalog-hero) .cert-hero-grid > div:first-child > p:not(.cert-eyebrow) {
+    width: 100%;
+    max-width: none;
+    font-size: 1rem;
+    line-height: 1.62;
+  }
+
+  .cert-hero:not(.catalog-hero) .cert-hero-note {
+    width: min(100%, 360px);
+    justify-self: center;
+    margin-top: 2px;
+  }
+
+  .cert-hero:not(.catalog-hero) .cert-hero-note strong,
+  .cert-hero:not(.catalog-hero) .cert-hero-note p {
+    overflow-wrap: break-word;
+  }
+
+  .certifications-page .floating-social {
+    display: none;
+  }
+}
+
+@media (max-width: 420px) {
+  .cert-hero:not(.catalog-hero) h1 {
+    font-size: 2rem;
+  }
+}
