@@ -8,14 +8,14 @@
 <meta name="description" content="Productos de limpieza, desinfectantes e higiene profesional en Costa Rica. Químicos Superiores del Sur.">
 <meta name="robots" content="index, follow" />
 <meta name="theme-color" content="#0f5132" />
-<link rel="canonical" href="https://alex-guty.github.io/Kilan-Quimicos-de-Sur/catalog.html" />
+<link rel="canonical" href="https://quimicossuperioresdelsur.com/" />
 <meta property="og:type" content="website" />
 <meta property="og:locale" content="es_CR" />
 <meta property="og:site_name" content="Kilan | Químicos Superiores del Sur" />
 <meta property="og:title" content="Catálogo Kilan | Químicos Superiores del Sur S.R.L." />
 <meta property="og:description" content="Catálogo de cloros, desinfectantes, alcoholes, lavamanos, lavaplatos, aromatizantes y más productos Kilan." />
-<meta property="og:url" content="https://alex-guty.github.io/Kilan-Quimicos-de-Sur/catalog.html" />
-<meta property="og:image" content="https://alex-guty.github.io/Kilan-Quimicos-de-Sur/images/image-upload1778200246.webp" />
+<meta property="og:url" content="https://quimicossuperioresdelsur.com/" />
+<meta property="og:image" content="https://quimicossuperioresdelsur.com/images/image-upload1778200246.webp" />
 <meta name="twitter:card" content="summary_large_image" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -698,6 +698,25 @@ function productImageMarkup(product) {
   return `<img src="${productImageSrc(product.image)}" alt="${escapeAttribute(product.name)}" />`;
 }
 
+function bindProductImageZoomReset(scope) {
+  scope.querySelectorAll('.selected-product-media').forEach(media => {
+    const resetImageZoom = () => {
+      media.classList.add('is-zoom-reset');
+      media.closest('.selected-product-card')?.blur();
+    };
+
+    media.addEventListener('pointerdown', resetImageZoom);
+    media.addEventListener('click', resetImageZoom);
+    media.addEventListener('dblclick', event => {
+      event.preventDefault();
+      resetImageZoom();
+    });
+    media.addEventListener('pointerleave', () => {
+      media.classList.remove('is-zoom-reset');
+    });
+  });
+}
+
 function getSelectedProductsWrap() {
   if (!selectedProductsWrap) {
     selectedProductsWrap = document.createElement('div');
@@ -869,6 +888,8 @@ function renderCategoryProducts(category, page = 1) {
         renderCategoryProducts(category, currentPage + 1);
       });
     }
+
+    bindProductImageZoomReset(productsWrap);
 
     productsWrap.classList.add('active');
   });

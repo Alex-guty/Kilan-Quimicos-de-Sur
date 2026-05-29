@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://alex-guty.github.io/Kilan-Quimicos-de-Sur/sitemap.xml
+Sitemap: https://quimicossuperioresdelsur.com/sitemap.xml
