@@ -20,7 +20,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=20260525-pyme-grid-card" />
+<link rel="stylesheet" href="css/styles.css?v=20260530-mobile-category-v3" />
 <script src="js/chatbot.js?v=20260523-chatbot" defer></script>
 </head>
 <body>
@@ -756,6 +756,7 @@ function renderCategoryMenu() {
   const sortedCategories = [...catalogData].sort((a, b) => a.category.localeCompare(b.category, 'es', { sensitivity: 'base' }));
   categoryMenu.innerHTML = `
     <span class="category-select-label" id="categorySelectLabel">Categoría de productos</span>
+    <button class="category-select-backdrop" id="categorySelectBackdrop" type="button" aria-label="Cerrar categorías"></button>
     <div class="category-select-shell">
       <button class="category-select" id="categorySelectButton" type="button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="categorySelectLabel categorySelectValue" aria-describedby="categorySelectHelp">
         <span id="categorySelectValue">Seleccione una categoría</span>
@@ -773,18 +774,37 @@ function renderCategoryMenu() {
   `;
 
   const categorySelectButton = document.getElementById('categorySelectButton');
+  const categorySelectBackdrop = document.getElementById('categorySelectBackdrop');
   const categorySelectValue = document.getElementById('categorySelectValue');
   const categorySelectList = document.getElementById('categorySelectList');
   const categoryOptions = categoryMenu.querySelectorAll('.category-select-option');
 
+  function updateCategoryListHeight() {
+    const buttonRect = categorySelectButton.getBoundingClientRect();
+    const availableHeight = window.innerHeight - buttonRect.bottom - 18;
+    const listHeight = Math.max(180, Math.min(520, availableHeight));
+    categoryMenu.style.setProperty('--category-list-max-height', `${listHeight}px`);
+  }
+
   function closeCategoryDropdown() {
     categoryMenu.classList.remove('is-open');
+    document.body.classList.remove('category-picker-open');
     categorySelectButton.setAttribute('aria-expanded', 'false');
   }
 
+  function openCategoryDropdown() {
+    updateCategoryListHeight();
+    categoryMenu.classList.add('is-open');
+    document.body.classList.add('category-picker-open');
+    categorySelectButton.setAttribute('aria-expanded', 'true');
+  }
+
   categorySelectButton.addEventListener('click', () => {
-    const isOpen = categoryMenu.classList.toggle('is-open');
-    categorySelectButton.setAttribute('aria-expanded', String(isOpen));
+    if (categoryMenu.classList.contains('is-open')) {
+      closeCategoryDropdown();
+    } else {
+      openCategoryDropdown();
+    }
   });
 
   function selectCategoryOption(option) {
@@ -803,12 +823,7 @@ function renderCategoryMenu() {
     option.addEventListener('click', () => selectCategoryOption(option));
   });
 
-  categorySelectList.addEventListener('pointerdown', event => {
-    const option = event.target.closest('.category-select-option');
-    if (!option) return;
-    event.preventDefault();
-    selectCategoryOption(option);
-  });
+  categorySelectBackdrop.addEventListener('click', closeCategoryDropdown);
 
   document.addEventListener('click', event => {
     if (!categoryMenu.contains(event.target)) closeCategoryDropdown();
@@ -816,6 +831,10 @@ function renderCategoryMenu() {
 
   categorySelectList.addEventListener('keydown', event => {
     if (event.key === 'Escape') closeCategoryDropdown();
+  });
+
+  window.addEventListener('resize', () => {
+    if (categoryMenu.classList.contains('is-open')) updateCategoryListHeight();
   });
 }
 

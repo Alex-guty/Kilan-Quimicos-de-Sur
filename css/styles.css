@@ -7229,3 +7229,71 @@ body {
     font-size: 2rem;
   }
 }
+
+/* Mobile category picker: lets users scroll the category list without selecting by accident. */
+.category-select-backdrop {
+  display: none;
+}
+
+@media (max-width: 720px) {
+  .category-select-panel {
+    position: relative;
+    z-index: 120;
+  }
+
+  .category-select-backdrop {
+    display: none;
+  }
+
+  .category-select-shell {
+    position: relative;
+    z-index: 125;
+  }
+
+  .category-select-list {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    bottom: auto;
+    left: 0;
+    z-index: 130;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: var(--category-list-max-height, min(68dvh, 520px));
+    padding: 10px;
+    overflow-y: auto;
+    border-radius: 18px;
+    overscroll-behavior: contain;
+    touch-action: pan-y;
+    -webkit-overflow-scrolling: touch;
+    transform: translateY(16px) scale(0.98);
+  }
+
+  .category-select-panel.is-open .category-select-list {
+    transform: translateY(0) scale(1);
+  }
+
+  .category-select-option {
+    min-height: 54px;
+    padding: 10px 14px;
+    touch-action: manipulation;
+  }
+
+  .category-option-name {
+    font-size: .96rem;
+  }
+
+  .category-option-count {
+    font-size: .76rem;
+  }
+
+  body.category-picker-open .selected-products-wrap,
+  body.category-picker-open .floating-social {
+    pointer-events: none;
+  }
+
+  body.category-picker-open .floating-social {
+    opacity: .18;
+  }
+}
