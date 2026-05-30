@@ -7235,10 +7235,16 @@ body {
   display: none;
 }
 
-@media (max-width: 720px) {
+@media (hover: none) and (pointer: coarse), (max-width: 720px) {
+  body.category-picker-open .catalog-page {
+    position: relative;
+    z-index: 220;
+    overflow: visible;
+  }
+
   .category-select-panel {
     position: relative;
-    z-index: 120;
+    z-index: 240;
   }
 
   .category-select-backdrop {
@@ -7247,7 +7253,7 @@ body {
 
   .category-select-shell {
     position: relative;
-    z-index: 125;
+    z-index: 250;
   }
 
   .category-select-list {
@@ -7256,7 +7262,7 @@ body {
     right: 0;
     bottom: auto;
     left: 0;
-    z-index: 130;
+    z-index: 260;
     display: flex;
     flex-direction: column;
     gap: 6px;

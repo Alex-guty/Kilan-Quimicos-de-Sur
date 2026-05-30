@@ -12,15 +12,15 @@
 <meta property="og:type" content="website" />
 <meta property="og:locale" content="es_CR" />
 <meta property="og:site_name" content="Kilan | Químicos Superiores del Sur" />
-<meta property="og:title" content="Catálogo Kilan | Químicos Superiores del Sur S.R.L." />
-<meta property="og:description" content="Catálogo de cloros, desinfectantes, alcoholes, lavamanos, lavaplatos, aromatizantes y más productos Kilan." />
+<meta property="og:title" content="Productos Kilan | Químicos Superiores del Sur S.R.L." />
+<meta property="og:description" content="Productos de cloros, desinfectantes, alcoholes, lavamanos, lavaplatos, aromatizantes y más líneas Kilan." />
 <meta property="og:url" content="https://quimicossuperioresdelsur.com/" />
 <meta property="og:image" content="https://quimicossuperioresdelsur.com/images/image-upload1778200246.webp" />
 <meta name="twitter:card" content="summary_large_image" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=20260525-pyme-grid-card" />
+<link rel="stylesheet" href="css/styles.css?v=20260530-styled-touch-category-v2" />
 <script src="js/chatbot.js?v=20260523-chatbot" defer></script>
 </head>
 <body>
@@ -34,7 +34,7 @@
     <nav class="nav-links">
       <a href="index.html">Inicio</a>
       <a href="index.html#nosotros">Nosotros</a>
-      <a href="catalog.html">Catálogo</a>
+      <a href="catalog.html">Productos</a>
       <a href="index.html#faq">FAQ</a>
       <a href="index.html#contacto">Contacto</a>
       <a href="Certificaciones.html">Certificaciones</a>
@@ -54,7 +54,7 @@
   <div class="container cert-hero-grid catalog-hero-grid">
     <div>
       <p class="cert-eyebrow">Líneas de limpieza e higiene</p>
-      <h1>Catálogo Kilan</h1>
+      <h1>Productos Kilan</h1>
       <p>Explora nuestras categorías y carga solo los productos que te interesan.</p>
     </div>
     <div class="cert-hero-note catalog-hero-note">
@@ -81,7 +81,7 @@
       <h4>Navegación</h4>
       <a href="index.html">Inicio</a>
       <a href="index.html#nosotros">Nosotros</a>
-      <a href="catalog.html">Catálogo</a>
+      <a href="catalog.html">Productos</a>
       <a href="index.html#contacto">Contacto</a>
     </div>
     <div class="footer-contact">
@@ -777,37 +777,91 @@ function renderCategoryMenu() {
   const categorySelectValue = document.getElementById('categorySelectValue');
   const categorySelectList = document.getElementById('categorySelectList');
   const categoryOptions = categoryMenu.querySelectorAll('.category-select-option');
+  let categoryPointerStart = null;
+  let categoryPointerMoved = false;
 
   function closeCategoryDropdown() {
     categoryMenu.classList.remove('is-open');
+    document.body.classList.remove('category-picker-open');
     categorySelectButton.setAttribute('aria-expanded', 'false');
   }
 
+  function updateCategoryListHeight() {
+    const buttonRect = categorySelectButton.getBoundingClientRect();
+    const availableHeight = window.innerHeight - buttonRect.bottom - 18;
+    const listHeight = Math.max(160, Math.min(520, availableHeight));
+    categoryMenu.style.setProperty('--category-list-max-height', `${listHeight}px`);
+  }
+
+  function openCategoryDropdown() {
+    updateCategoryListHeight();
+    categoryMenu.classList.add('is-open');
+    document.body.classList.add('category-picker-open');
+    categorySelectButton.setAttribute('aria-expanded', 'true');
+  }
+
   categorySelectButton.addEventListener('click', () => {
-    const isOpen = categoryMenu.classList.toggle('is-open');
-    categorySelectButton.setAttribute('aria-expanded', String(isOpen));
+    if (categoryMenu.classList.contains('is-open')) {
+      closeCategoryDropdown();
+    } else {
+      openCategoryDropdown();
+    }
   });
 
-  function selectCategoryOption(option) {
-    const category = catalogData.find(item => item.category === option.dataset.category);
+  function selectCategory(category, selectedOption) {
     if (!category) return;
 
     categoryOptions.forEach(item => item.setAttribute('aria-selected', 'false'));
-    option.setAttribute('aria-selected', 'true');
+    const option = selectedOption || Array.from(categoryOptions).find(item => item.dataset.category === category.category);
+    if (option) option.setAttribute('aria-selected', 'true');
     categorySelectValue.textContent = `${category.category} - ${category.products.length} productos`;
     closeCategoryDropdown();
 
     renderCategoryProducts(category);
   }
 
-  categoryOptions.forEach(option => {
-    option.addEventListener('click', () => selectCategoryOption(option));
-  });
+  function selectCategoryOption(option) {
+    const category = catalogData.find(item => item.category === option.dataset.category);
+    selectCategory(category, option);
+  }
 
   categorySelectList.addEventListener('pointerdown', event => {
+    categoryPointerStart = {
+      x: event.clientX,
+      y: event.clientY,
+      scrollTop: categorySelectList.scrollTop
+    };
+    categoryPointerMoved = false;
+  }, { passive: true });
+
+  categorySelectList.addEventListener('pointermove', event => {
+    if (!categoryPointerStart) return;
+    const movedX = Math.abs(event.clientX - categoryPointerStart.x);
+    const movedY = Math.abs(event.clientY - categoryPointerStart.y);
+    if (movedX > 8 || movedY > 8) categoryPointerMoved = true;
+  }, { passive: true });
+
+  categorySelectList.addEventListener('scroll', () => {
+    if (categoryPointerStart && categorySelectList.scrollTop !== categoryPointerStart.scrollTop) {
+      categoryPointerMoved = true;
+    }
+  }, { passive: true });
+
+  categorySelectList.addEventListener('pointerup', () => {
+    categoryPointerStart = null;
+  });
+
+  categorySelectList.addEventListener('click', event => {
     const option = event.target.closest('.category-select-option');
     if (!option) return;
-    event.preventDefault();
+
+    if (categoryPointerMoved) {
+      event.preventDefault();
+      event.stopPropagation();
+      categoryPointerMoved = false;
+      return;
+    }
+
     selectCategoryOption(option);
   });
 
@@ -817,6 +871,10 @@ function renderCategoryMenu() {
 
   categorySelectList.addEventListener('keydown', event => {
     if (event.key === 'Escape') closeCategoryDropdown();
+  });
+
+  window.addEventListener('resize', () => {
+    if (categoryMenu.classList.contains('is-open')) updateCategoryListHeight();
   });
 }
 
